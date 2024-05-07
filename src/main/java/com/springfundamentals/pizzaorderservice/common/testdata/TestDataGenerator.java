@@ -39,6 +39,7 @@ public class TestDataGenerator implements CommandLineRunner {
   private void createPizzaMenuTestData() {
     pizzaMenuRepository.save(new PizzaMenuItem("1", "Pizza Margherita", 15));
     pizzaMenuRepository.save(new PizzaMenuItem("2", "Pizza Salami", 18));
+    pizzaMenuRepository.save(new PizzaMenuItem("3", "Pizza Diavola", 23));
   }
 
   private void createPizzaOrderTestData() {
