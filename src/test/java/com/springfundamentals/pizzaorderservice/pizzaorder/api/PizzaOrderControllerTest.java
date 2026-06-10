@@ -3,7 +3,7 @@ package com.springfundamentals.pizzaorderservice.pizzaorder.api;
 import com.springfundamentals.pizzaorderservice.pizzaorder.service.PizzaOrderService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,36 +18,38 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(PizzaOrderController.class)
 public class PizzaOrderControllerTest {
 
-  @Autowired
-  private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-  @MockitoBean
-  private PizzaOrderService pizzaOrderService;
+    @MockitoBean
+    private PizzaOrderService pizzaOrderService;
 
-  @Test
-  public void pizzaOrderWithId_getPizzaOrderById_foundPizzaOrderAndStatusOk() throws Exception {
-    doReturn(new PizzaOrderDto("1", emptyList())).when(pizzaOrderService).findById("1");
+    @Test
+    public void pizzaOrderWithId_getPizzaOrderById_foundPizzaOrderAndStatusOk() throws Exception {
+        doReturn(new PizzaOrderDto("1", emptyList())).when(pizzaOrderService).findById("1");
 
-    mockMvc.perform(get("/pizza-orders/1"))
-        .andExpect(status().isOk())
-        .andExpect(content().json("{\n"
-            + "  \"orderId\": \"1\",\n"
-            + "  \"orderItems\": []\n"
-            + "}"));
-  }
+        mockMvc.perform(get("/pizza-orders/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        {
+                          "orderId": "1",
+                          "orderItems": []
+                        }"""));
+    }
 
-  @Test
-  public void validInput_createPizzaOrder_returnStatusIs201Created() throws Exception {
-    mockMvc.perform(post("/pizza-orders")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content("{\n"
-            + "  \"orderItems\": [\n"
-            + "    {\n"
-            + "      \"name\": \"Test Pizza\",\n"
-            + "      \"quantity\": 1\n"
-            + "    }\n"
-            + "  ]\n"
-            + "}"))
-    .andExpect(status().isCreated());
-  }
+    @Test
+    public void validInput_createPizzaOrder_returnStatusIs201Created() throws Exception {
+        mockMvc.perform(post("/pizza-orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "orderItems": [
+                                    {
+                                      "name": "Test Pizza",
+                                      "quantity": 1
+                                    }
+                                  ]
+                                }"""))
+                .andExpect(status().isCreated());
+    }
 }

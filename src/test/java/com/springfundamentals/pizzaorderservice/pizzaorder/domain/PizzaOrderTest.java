@@ -7,12 +7,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PizzaOrderTest {
 
-  @Test
-  public void pizzaOrderWithNinePizza_getTotalQuantityOfOrderedPizzas_returnNine() {
-    PizzaOrder pizzaOrderWithNinePizzas = new PizzaOrder(asList(new PizzaOrderItem("Pizza Salami", 5), new PizzaOrderItem("Pizza Parma", 4)));
+    @Test
+    public void pizzaOrderWithNinePizza_getTotalQuantityOfOrderedPizzas_returnNine() {
+        PizzaOrder pizzaOrderWithNinePizzas = new PizzaOrder(asList(new PizzaOrderItem("Pizza Salami", 5), new PizzaOrderItem("Pizza Parma", 4)));
 
-    int totalQuantityOfOrderedPizzas = pizzaOrderWithNinePizzas.getTotalQuantityOfOrderedPizzas();
+        int totalQuantityOfOrderedPizzas = pizzaOrderWithNinePizzas.getTotalQuantityOfOrderedPizzas();
 
-    assertThat(totalQuantityOfOrderedPizzas).isEqualTo(9);
-  }
+        assertThat(totalQuantityOfOrderedPizzas).isEqualTo(9);
+    }
 }
