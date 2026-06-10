@@ -1,14 +1,14 @@
 package com.springfundamentals.pizzaorderservice.pizzaorder.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springfundamentals.pizzaorderservice.pizzaorder.service.PizzaOrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
@@ -22,42 +22,43 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(PizzaOrderController.class)
 public class PizzaOrderControllerTest {
 
-  @Autowired
-  private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-  @MockitoBean
-  private PizzaOrderService pizzaOrderService;
+    @MockitoBean
+    private PizzaOrderService pizzaOrderService;
 
-  private JacksonTester<List<PizzaOrderDto>> jacksonTester;
+    private JacksonTester<List<PizzaOrderDto>> jacksonTester;
 
-  @BeforeEach
-  public void setUp() {
-    ObjectMapper objectMapper = new ObjectMapper();
-    JacksonTester.initFields(this, objectMapper);
-  }
+    @BeforeEach
+    public void setUp() {
+        JsonMapper objectMapper = new JsonMapper();
+        JacksonTester.initFields(this, objectMapper);
+    }
 
-  @Test
-  public void twoPizzaOrders_getAllOrders_twoOrders() throws Exception {
-    doReturn(asList(new PizzaOrderDto("1", emptyList()), new PizzaOrderDto("2", emptyList()))).when(pizzaOrderService).findAll();
+    @Test
+    public void twoPizzaOrders_getAllOrders_twoOrders() throws Exception {
+        doReturn(asList(new PizzaOrderDto("1", emptyList()), new PizzaOrderDto("2", emptyList()))).when(pizzaOrderService).findAll();
 
-    mockMvc.perform(get("/pizza-orders"))
-        .andExpect(status().isOk())
-        .andExpect(content().json("[{\n"
-            + "  \"orderId\": \"1\" ,\n"
-            + "  \"orderItems\": []\n"
-            + "},{\n"
-            + "  \"orderId\": \"2\" ,\n"
-            + "  \"orderItems\": []\n"
-            + "}]"));
+        mockMvc.perform(get("/pizza-orders"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        [{
+                          "orderId": "1" ,
+                          "orderItems": []
+                        },{
+                          "orderId": "2" ,
+                          "orderItems": []
+                        }]"""));
 
-  }
+    }
 
-  @Test
-  public void twoPizzaOrders_getAllOrders_twoOrdersJacksonTester() throws Exception {
-    doReturn(asList(new PizzaOrderDto("1", emptyList()), new PizzaOrderDto("2", emptyList()))).when(pizzaOrderService).findAll();
+    @Test
+    public void twoPizzaOrders_getAllOrders_twoOrdersJacksonTester() throws Exception {
+        doReturn(asList(new PizzaOrderDto("1", emptyList()), new PizzaOrderDto("2", emptyList()))).when(pizzaOrderService).findAll();
 
-    mockMvc.perform(get("/pizza-orders"))
-        .andExpect(status().isOk())
-        .andExpect(content().json(jacksonTester.write(asList(new PizzaOrderDto("1", emptyList()), new PizzaOrderDto("2", emptyList()))).getJson()));
-  }
+        mockMvc.perform(get("/pizza-orders"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(jacksonTester.write(asList(new PizzaOrderDto("1", emptyList()), new PizzaOrderDto("2", emptyList()))).getJson()));
+    }
 }
